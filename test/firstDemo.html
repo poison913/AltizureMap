@@ -1,0 +1,46 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>First Demo using Altizure_hjy_sdk</title>
+</head>
+
+<body>
+  <div id="page-content"></div>
+</body>
+<script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+<script type:="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geojson"></script>
+<script type:="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geosystem"></script>
+
+<script type:="text/javascript" src="../dist/bundle.js"></script>
+
+<script>
+  //Todo: 测试代码
+  const options = {
+    altizureApi: {
+      key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy',
+    },
+    renderItems: {
+      earth: true,
+      earthUseTexture: true,
+      featureInView: false,
+      orbitRing: true
+    }
+  }
+
+  //初始化地图容器
+  let map = new hky.Map('page-content', options);
+
+  //初始化Geojson图层
+  let geojsonLayer = new hky.GeojsonLayer("./data/polygon2.json", "4549");
+  geojsonLayer.addTo(map);
+  
+  //绘制图层
+  geojsonLayer.refresh(map);
+
+  //飞行设置
+  map.flyTo({ lng: 120.1766745, lat: 30.3132158, alt: 500, tilt: 40 }, 10);
+</script>
+
+</html>

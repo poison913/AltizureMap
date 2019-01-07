@@ -1,0 +1,30 @@
+{
+  "name": "cimExtracter",
+  "version": "0.0.1",
+  "description": "first init of hky_web_gis sdk",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack"
+  },
+  "keywords": [
+    "hky",
+    "gis"
+  ],
+  "author": "xwhsky",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^0.28.11",
+    "ts-loader": "^2.3.7",
+    "tslint": "^5.11.0",
+    "typedoc": "^0.13.0",
+    "typescript": "^2.9.2",
+    "webpack": "^2.7.0",
+    "worker-loader": "^2.0.0"
+  },
+  "dependencies": {
+    "anyway": "0.0.6",
+    "anywhere": "^1.5.0"
+  }
+}

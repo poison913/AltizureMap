@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "sourceMap": true, //保证可以调试
+        "strict": true,
+        "module": "es6",
+        "moduleResolution": "node",
+        "target": "es5",
+        // "experimentalDecorators": true
+        "noImplicitAny": true,
+        "jsx": "react",
+        "allowJs": true,
+        "lib": [
+            "webworker",
+            "dom",
+            "es2015"
+        ]
+    },
+    "include": [
+        "./src/**/*",
+        "src/core/.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+}
