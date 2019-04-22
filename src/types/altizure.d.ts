@@ -59,9 +59,13 @@ declare namespace altizure {
 	 */
 	interface Pose extends LngLatAlt {
 		/**
-		 * 毫秒
+		 * 倾角
 		 */
-		tilt: number
+		tilt: number,
+		/**
+		 * 方向
+		 */
+		north: number
 	}
 
 
@@ -84,12 +88,14 @@ declare namespace altizure {
 	 */
 	class Sandbox extends Earth {
 		constructor(divname: string, sanboxOptions: SanboxOptions);
-
+    
 		/**摄像头 */
 		camera: any;
 
 		window: any;
-
+		markerLayer:any;
+		/**渲染器的dom元素 */
+		domElement:any;
 		/**
 		 * 加载
 		 * @param type 元素类型：‘AltizureProjectMarker’,'OBJMarker'
@@ -108,6 +114,7 @@ declare namespace altizure {
 
 		on(eventType: string, handler: Function): void;
 		off(eventType: string, handler: Function): void;
+		pickOnProjects(event:object): LngLatAlt; 
 	}
 
 	interface MarkerOptions {
@@ -125,9 +132,8 @@ declare namespace altizure {
 		bottom?: number | Array<Array<number>>,
 		color?: number,
 		opacity?: number,
-		points: Array<LngLatAlt>,
+		points: Array<Array<LngLatAlt>>,
 	}
-
 	// interface PolygonMarkerOptions extends MarkerOptions {
 	//     volume: Volume,
 	// }
@@ -139,18 +145,104 @@ declare namespace altizure {
 		interactable?: boolean,
 	}
 
-	class PolygonMarker extends Marker {
-		constructor(polygonMarkerOptions: any);
-		bottom: Number;
-		top: Number;
-
+	
+	interface TextTagMarkerOptions {
+		text: string,
+		textStyle:object,
+		sandbox: Sandbox,
+		position: LngLatAlt,
+		scale?: Number
 	}
-
+	interface TagMarkerOptions {
+		imgUrl: string, 
+		sandbox: Sandbox,
+		position: LngLatAlt,
+		scale?: Number
+	}
+	interface LightBeamMarkerOptions {
+		color: object 
+	}
+	interface OBJMarkerOptions {
+		sandbox: Sandbox,
+		position: LngLatAlt,
+		shape: string, 
+		objUrl : string,
+		mtlUrl:string,
+		upDir:object,
+		scale?: Number
+	}
+	interface CameraMarkerOptions {
+		camToEarth: Array<number>, 
+		sandbox: Sandbox,
+		position: LngLatAlt,
+		showNear:	boolean	,  
+		showFar: boolean	 ,
+		color:	object ,
+		fov:	number	 ,
+		near:	number	 ,
+		far	:number	 ,
+		aspect:	number,
+		euler:object
+	}
+	//图标
 	class Marker {
 		destruct(): void;
 		// constructor(markerOptions: markerOptions);
 	}
+	//面
+	class PolygonMarker extends Marker {
+		constructor(polygonMarkerOptions: any);
+		bottom: Number;
+		top: Number;
+		position: LngLatAlt;
+	}
+	//文字标注
+	class TextTagMarker extends Marker {
+		constructor( textTagMarkerOptions: any);  
+	}
+	//文字标注
+	class TagMarker extends Marker {
+		constructor( TagMarkerOptions: any);  
+	} 
+	class OBJMarker extends Marker {
+		constructor( OBJMarkerOptions: any);  
+		position :object;
+		euler :object
+	}
+	class LightBeamMarker extends Marker {
+		constructor( LightBeamMarkerOptions: any);  
+		color:object
+	}
+	class CameraMarker extends Marker {
+		constructor( CameraMarkerOptions: any);  
+		euler:object;
+		camToEarth: Array<number>;
+	}
 
+	
+	interface ParticleEffectsMarkerOptions { 
+		sandbox: Sandbox,
+		position: LngLatAlt,
+		scale?: Number
+	}
+	class ParticleEffectsMarker extends Marker {
+		constructor( ParticleEffectsMarkerOptions: any);  
+		scale:number;
+		animatingTime: number;
+	} 
+	interface ZoneMarkerOptions {  
+		sandbox: Sandbox,
+		position: LngLatAlt,
+		scale?: Number,
+		volume:object,
+		tagOrientation:object,
+		tagScale:number,
+		imgUrl:string,
+		textOptions:object
+	}
+	class ZoneMarker extends PolygonMarker {
+		constructor( ZoneMarkerOptions: any);   
+	}
 	interface SimpleAltizureProjectMarker {
 		pid: string
 	}
@@ -168,8 +260,33 @@ declare namespace altizure {
 		 */
 		dim(): void;
 		initialized: altizure.AltizureProjectMarker;
-	}
 
+		pickDepthMap(points:Array<LngLatAlt>):Array<number>;
+	}
+	
+	class PolyLineMarker extends Marker
+	{
+		constructor(PLOPtion: PLOPtion);
+	}
+	interface PLOPtion {
+		sandbox: Sandbox,
+		points: Array<LngLatAlt> ,
+		color:Object,
+		fenceHeight:number,
+		name:string,
+		lineWidth:number
+	}
+	class PolyCylinderLineMarker extends Marker
+	{
+		constructor(PLOPtion: PLCOPtion);
+	}
+	interface PLCOPtion {
+		sandbox: Sandbox,
+		points: Array<LngLatAlt> ,
+		color:Object, 
+		name:string,
+		lineWidth:number
+	}
 	interface APMOptions {
 		earth: Earth;
 		projInfo: object;

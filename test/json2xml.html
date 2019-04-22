@@ -1,0 +1,92 @@
+<!DOCTYPE html>      
+<html lang="en">      
+<head>      
+    <meta charset="UTF-8">      
+    <title>js实现xml转json和json转xml</title>    
+    <style type="text/css">    
+        html,body{width:100%;height:100%;margin:0;}     
+    </style>    
+</head>      
+<body>     
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>    
+<script type="text/javascript" src="http://www.jsons.cn/Down/jquery.json2xml.js"></script>
+<script type="text/javascript" src="http://www.jsons.cn/Down/jquery.xml2json.js"></script>
+ 
+<script type="text/javascript"> 
+ 
+//参考链接：http://www.jsons.cn/articleinfo/8/
+ 
+var json = {
+  "alexa": {
+    "@attributes": {
+      "ver": "0.9",
+      "url": "http://coursesweb.net/",
+      "home": "0",
+      "aid": "="
+    },
+    "#text": "",
+    "sd": [
+      {
+        "@attributes": {
+          "title": "a",
+          "host": "coursesweb.net"
+        },
+        "#text": "",
+        "title": {
+          "#text": "CoursesWeb: php, mysql, html, css, javascript, ajax, jquery, actionscript, flash"
+        },
+        "linksin": {
+          "@attributes": {
+            "num": "1102"
+          }
+        },
+        "speed": {
+          "@attributes": {
+            "pct": "51"
+          },
+          "#text": "4578"
+        }
+      },
+      {
+        "#text": "",
+        "popularity": {
+          "#text": "5777"
+        },
+        "reach": {
+          "@attributes": {
+            "rank": "5952"
+          }
+        },
+        "rank": {
+          "@attributes": {
+            "url": "http://coursesweb.net/"
+          },
+          "#text": "6667"
+        }
+      }
+    ]
+  }
+};
+ 
+var xml_content = $.json2xml(json);
+console.log(xml_content);
+ 
+var xmlstr = `<alexa ver="0.9" url="http://coursesweb.net/" home="0" aid="=">  
+  <sd title="a" host="coursesweb.net">  
+    <title>CoursesWeb: php, mysql, html, css, javascript, ajax, jquery, actionscript, flash</title>  
+    <linksin num="1102"/>  
+    <speed pct="51">4578</speed>  
+  </sd>  
+  <sd>  
+    <popularity>5777</popularity>  
+    <reach rank="5952"/>  
+    <rank url="http://coursesweb.net/">6667</rank>  
+  </sd>  
+</alexa>`; 
+ 
+var json_obj = $.xml2json(xmlstr);
+console.log(json_obj);
+ 
+</script>        
+</body>      
+</html>

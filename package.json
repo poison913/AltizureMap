@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "anyway": "0.0.6",
-    "anywhere": "^1.5.0"
+    "anywhere": "^1.5.0",
+    "xml2js": "^0.4.19"
   }
 }

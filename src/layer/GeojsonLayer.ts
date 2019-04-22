@@ -5,6 +5,7 @@ import { Layer } from "./Layer";
 export class GeojsonLayer extends Layer {
 
 	geoJsonHttpUrl: string;
+	//json:any;
 	crs: string;
 
 	polygons!: altizure.PolygonMarker[];
@@ -17,6 +18,7 @@ export class GeojsonLayer extends Layer {
 	constructor(url: string, crs: string) {
 		super();
 		this.geoJsonHttpUrl = url;
+		//this.json = JSON.parse(jsonstr) ;
 		this.crs = crs;
 		this.polygons = new Array<altizure.PolygonMarker>();
 	}
@@ -34,7 +36,7 @@ export class GeojsonLayer extends Layer {
 	 * 绘制图层
 	 */
 	refresh(): void {
-		if (this.map == undefined) return;
+	 
 		fetch(this.geoJsonHttpUrl, {
 			mode: 'cors',
 			headers: {
@@ -51,8 +53,15 @@ export class GeojsonLayer extends Layer {
 					})
 
 					this.polygons = polygonMarkers;
+					//定位
+					if(polygonMarkers.length>0){
+						let pose = Object.assign({}, this.polygons[0].position) as altizure.Pose;
+						pose.alt = pose.alt+1000;
+						pose.tilt = 45;
+						this.map.flyTo( pose,1000) ;
+					}
 				},
 			);
-		});
+		}); 
 	}
 }

@@ -4,43 +4,482 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>First Demo using Altizure_hjy_sdk</title>
+  <style>
+  p{
+    margin-top: 0px
+  }
+  </style>
 </head>
 
 <body>
+  <button onclick="flyto()">单点飞行</button>
+  <button onclick="flystop()">飞行暂停</button>
+  <button onclick="continueflyTo()">飞行继续</button>
+  <button onclick="aPose()">单点切换</button>
+  <button onclick="MuiltiFlyto()">多点飞行</button>
+  <button onclick="LineTo()">单点平滑</button>
+  <button onclick="MuiltiLineTo()">多点平滑</button>
+  <button onclick="MuiltiPose()">多点切换</button>
+  <button onclick="addamark()">添加场景</button>
+  <button onclick="textmarker()">添加文字标注</button>
+  <button onclick="removetextmarker()">移除文字标注</button>
+  <button onclick="tagmarker()">添加图片图标</button>
+  <button onclick="removetagmarker()">移除图片图标</button>
+  <button onclick="circleflyTo()">环绕</button>
+  <button onclick="rorateflyTo()">旋转</button> 
+  <button onclick="addParticle()">添加特效</button>
+  <button onclick="removeParticle()">删除特效</button>
+  <button onclick="addobjmarker()">添加模型</button>
+  <button onclick="moveobjmarker()">移动模型</button>
+  <button onclick="removeobjmarker()">删除模型</button>
+  <button onclick="addLightBeamMarker()">添加LightBeamMarker</button>
+  <button onclick="removeLightBeamMarker()">删除LightBeamMarker</button>
+  <button onclick="addpopup()">添加气泡</button>
+  <button onclick="closepopup()">删除气泡</button>
+  <button onclick="addframe()">添加弹框</button>
+  <button onclick="closeframe()">删除弹框</button>
+  <button onclick="addGeojson()">添加GeoJSon图层</button>
+  <button onclick="removeGeoJSON()">删除GeoJSon图层</button>
+  <button onclick="addline()">添加线图层</button>
+  <button onclick="removeline()">删除线图层</button>
+  <button onclick="addcircleline()">添加圆线图层</button>
+  <button onclick="removecircleline()">删除圆线图层</button>
+  <button onclick="calculateDistance()">开始量算</button>
+  <button onclick="disablecalculateDistance()">结束量算</button>
+  <button onclick="play()">播放</button>
+  <button onclick="pause()">暂停</button>
+  <button onclick="stop()">停止</button>
+  <button onclick="continueaction()">继续</button>
+  <!-- <button onclick="addZoneMarker()">添加ZoneMarker</button>
+  <button onclick="removeZoneMarker()">删除ZoneMarker</button>
+  <button onclick="swirlLeft()">swirlLeft</button>
+  <button onclick="CameraMarker()">CameraMarker</button>
+  <button onclick="CameraRorate()">CameraRorate</button>   -->
   <div id="page-content"></div>
 </body>
 <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
 <script type:="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geojson"></script>
 <script type:="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geosystem"></script>
-
+<script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+<script type="text/javascript" src="https://beta.altizure.cn/sdk-plugin-particle-effect"></script> 
 <script type:="text/javascript" src="../dist/bundle.js"></script>
-
+<script type:="text/javascript" src="data/playjson.js"></script>
+<script type:="text/javascript" src="data/playtestdata.js"></script>
 <script>
   //Todo: 测试代码
   const options = {
     altizureApi: {
-      key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy',
+      key: 'KIO3EJ7vbYSfGiSiEkYM7Ad9ebRAKLrbsKHIgOY'//'7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy',
     },
+    camera: {
+          // camera start position
+          poseTo: {
+            lat: 30.947870295755546,
+            lng: 120.88925225766249,
+            alt: 200,
+            north: 0,
+            tilt: 60
+          },
+          // camera target position
+          flyTo: {
+           lng: 120.88899948739009, lat: 30.946866155511772, alt: 309.76662630581578,
+            north: 82.2586604541772,
+            tilt: 52.39667031677064
+          }
+        },
     renderItems: {
       earth: true,
-      earthUseTexture: true,
+      //earthUseTexture: true,
       featureInView: false,
       orbitRing: true
     }
   }
 
   //初始化地图容器
-  let map = new hky.Map('page-content', options);
-
+  let map = new hky.Map('page-content', options); 
+  let geojsonLayer ;
+ function addGeojson(){
+ //let json = {}
   //初始化Geojson图层
-  let geojsonLayer = new hky.GeojsonLayer("./data/polygon2.json", "4549");
-  geojsonLayer.addTo(map);
+  geojsonLayer = new hky.GeojsonLayer(json, "4549");
+  geojsonLayer.addTo(map); /*  */
   
   //绘制图层
   geojsonLayer.refresh(map);
+ }
+ function removeGeoJSON(){
+  geojsonLayer.remove();
+ }
+  //单点飞行 
+  function flyto(){ 
+    map.flyTo({ lng: 120.1766745, lat: 31.3132158, alt: 900,north: 0, tilt: 45 }, 5000);
+  }
+  //飞行暂停
+  function flystop()
+  {
+    map.flystop();
+  } 
+  function continueflyTo(){
+    map.continueflyTo();
+  }
+  //单点平滑
+  function LineTo(){
+    map.LineTo({lng: 120.88899948739009, lat: 30.946866155511772, alt: 309.76662630581578,north: 82.2586604541772, tilt: 52.39667031677064
+          },5000,"slow");
+  }
+  function MuiltiLineTo(){
+    var arr=[{lng: 120.17728829848852, lat: 31.31226007445957, alt: 900.81599801439208,north: 0, tilt: 45 },
+              {lng: 120.27726343248415, lat: 31.313476284133642, alt: 900.30991225649431,north: 0, tilt: 45 },
+              {lng: 120.17656461851811, lat: 31.5135512925279, alt: 900.83689825516218,north: 0, tilt: 45 },
+              {lng: 120.275909439483, lat: 31.513168373686228, alt: 900.88629712296685,north: 0, tilt: 45 },
+              {lng: 120.17712081574817, lat: 31.3124796832894, alt: 900.49248011331993,north: 0, tilt: 45 }
+            ];
+    map.MuiltiLineTo(arr,12000,'slow');
+  }
+ /**
+     * 多点飞行
+     * @param aps 飞行点
+     * @param turnTime 每次飞行时间，单位毫秒
+     * @param speed : veryslow （turnTime*4）; slow（turnTime*2）; normal（turnTime*1）; fast（turnTime*0.5）; veryfast（turnTime*0.25）
+     */
+  function MuiltiFlyto(){
+    var arr=[{lng: 120.17728829848852, lat: 31.31226007445957, alt: 900.81599801439208,north: 0, tilt: 45 },
+              {lng: 120.27726343248415, lat: 31.313476284133642, alt: 900.30991225649431,north: 0, tilt: 45 },
+              {lng: 120.17656461851811, lat: 31.5135512925279, alt: 900.83689825516218,north: 0, tilt: 45 },
+              {lng: 120.275909439483, lat: 31.513168373686228, alt: 900.88629712296685,north: 0, tilt: 45 },
+              {lng: 120.17712081574817, lat: 31.3124796832894, alt: 900.49248011331993,north: 0, tilt: 45 }
+            ];
+   /*  arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900,north: 0, tilt: 0  });
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900,north: 0, tilt: 45  })
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900, north: 90, tilt: 90 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900, north: 135, tilt: 135 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900, north: 180, tilt: 180 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158,  alt: 900,north: 225, tilt: 225 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900, north: 270, tilt: 275 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900, north: 315, tilt: 315 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158,  alt: 900,north: 360, tilt: 355 }) */
+    map.MuiltiFlyto(arr,12000,'slow');
+  }
+  function aPose(){
+    //map.sandbox.camera.pose = {lng: 120.1766745, lat: 31.3132158, alt: 500.76662630581578, tilt: 40 };
+    map.Pose({lng: 120.1766745, lat: 31.3132158, alt: 500.76662630581578, tilt: 40 })
+  }
+  function MuiltiPose(){
+    var arr= [{lng: 120.17728829848852, lat: 31.31226007445957, alt: 900.81599801439208,north: 0, tilt: 45 },
+              {lng: 120.17726343248415, lat: 31.313476284133642, alt: 900.30991225649431,north: 0, tilt: 45 },
+              {lng: 120.17656461851811, lat: 31.3135512925279, alt: 900.83689825516218,north: 0, tilt: 45 },
+              {lng: 120.175909439483, lat: 31.313168373686228, alt: 900.88629712296685,north: 0, tilt: 45 },
+              {lng: 120.17712081574817, lat: 31.3124796832894, alt: 900.49248011331993,north: 0, tilt: 45 }
+            ];
+   /*  arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900,north: 0, tilt: 45  });
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900,north: 0, tilt: 45  })
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900, north: 90, tilt: 45 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900, north: 135, tilt: 45 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900, north: 180, tilt: 45 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158,  alt: 900,north: 225, tilt: 45 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900, north: 270, tilt: 45 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158, alt: 900, north: 315, tilt: 45 })
+    arr.push({ lng: 120.1766745, lat: 31.3132158,  alt: 900,north: 360, tilt: 45 }) */
+    map.MuiltiPose(arr,2000,'slow');
+  }
+  var amark ;
+  let n ;
+  function addamark(){
+   /*  map.sandbox.add('AltizureProjectMarker', {
+      pid: '5a516bf09cc1ca6677586069',//'5c0e38e695da9479e139021c',
+      pose: {
+        position: {lng: 120.88899948739009, lat: 30.946866155511772, alt: 9.76662630581578,}
+      }
+    }) */
+    var option = {
+      pid: '5849104597b73e0b090c01e8',//'5c0e38e695da9479e139021c',
+      pose: {
+        position: { lng: 120.1766745, lat: 31.3132158, alt: 90.76662630581578,}
+      },
+      sandbox:map.sandbox,
+      name:"AltizureProjectMarker"
+    }
+    amark = new hky.AltizureProjectMarker(option);
+    amark.addTo(map);
+    m = amark.refresh();
+    m.then(function(res){
+        n = res;
+    })
+  }
+  function removemark(){
+    amark.remove();
+  }
+  var tmark;
+  function textmarker(){
+    var option = {
+            // text string
+            text: 'Altizure',
+            // text style
+            textStyle: {
+              fillStyle: 'rgb(155, 155, 255)',
+              font: 'normal 500 24px Arial',
+              outlineWidth: 2,
+              outlineStyle: 'rgb(0, 0, 0)'
+            },
+            // icon position
+            position: { lng: 120.1766745, lat: 31.3132158, alt: 200.76662630581578 },
+            // scene
+            sandbox: map.sandbox,
+            scale: 1 ,// icon size
+            name:"textm"//mark的名称，删除的时候用
+          }
+    tmark = new hky.TextTagMarker(option);
+  }
+  function removetextmarker(){
+    //tmark.remove();
+    map.removeMarker("textm");
+  }
+  function circleflyTo(){
+     /**
+     * camera针对某个目标进行360度环绕
+     * @param tilt 倾角
+     * @param circle 圆心位置
+     * @param startPosition 环绕起始位置: 30(与正北方向夹角30度)
+     * @param direction 环绕方向: Clockwise(顺时针); CounterClockwise(逆时针)
+     * @param angularSpeed 角速度: 30(每秒环绕30度)
+     * @param turnTime 环绕时间  
+     * @returns promise
+     */
+    map.circleflyTo(60, {lng: 120.1766745, lat: 31.3132158, alt: 500.76662630581578},30,'CounterClockwise',45,20000);
+  }
+  function rorateflyTo(){
+    map.rorateflyTo({lng: 120.17198482852862, lat: 31.311859355124714, alt: 507.9418393633968, north: 105.22417750027779, tilt: 74.18742670249613},'CounterClockwise',45,16000);
+  }
+  function swirlLeft(){
+    setInterval(function(){  map.sandbox.earthView.control.swirlLeft(-2 * Math.PI / 120); }, 20);
+   
+  }
+  let cmarker ;
+  function CameraMarker(){
+    var option = { 
+            position: { lng: 120.1766745, lat: 31.3132158, alt: 200.76662630581578,tilt: 40,north: 40 },
+            // scene
+            sandbox: map.sandbox 
+          }
+    cmarker = new hky.CameraMarker(option);
+  }
+  function CameraRorate(){
+    //map.sandbox.camera.pose =   { lng: 120.1766745, lat: 31.3132158, alt: 200.76662630581578,tilt: 40,north: 40 }; 
+    map.sandbox.camera.flyToCamToEarth(cmarker.cameraMarker._camToEarth);//map.sandbox.camera.mat;
+  } 
+  function addParticle(){
+    //effect 包括  'fire',   'snow',  'clouds',   'smoke'
+    var poption={
+          sandbox: map.sandbox,
+          position:  { lng: 120.1766745, lat: 31.3132158, alt: 200.76662630581578 },
+          effect: 'fire',
+          scale: 1,
+          name:"fire"
+    }
+    var pmarker = hky.ParticleEffectsMarker(poption);
+  }
+  function removeParticle(){
+    //pmarker.remove();
+    //pmarker.particleEffectsMarker.visible = false
+    map.removeMarker("fire");
+  }
+  function tagmarker(){
+    let option ={
+			imgUrl: "http://zjslbzhjg.dcyun.com:49001/Pictures/icon-yellow-light.png",//'img/tagDemo.png',
+			// icon position
+			position:  { lng: 120.1766745, lat: 31.3132158, alt: 200.76662630581578 },
+			// scene
+			sandbox: map.sandbox,
+      scale: 0.3 ,// icon size
+      name:"img"
+    }
+    let tmarker = new hky.TagMarker(option);
+  }
+  function removetagmarker(){
+    map.removeMarker("img");
+  }
+  let objmarker;
+  function  addobjmarker(){
+    let option ={  
+			position:  {lng: 120.17592114500191, lat: 31.31322075891434, alt: 98.83762222660852 }, 
+      sandbox: map.sandbox,
+      shape: 'CUSTOMIZE',
+      objUrl: 'model/file.obj',
+      mtlUrl: 'model/file.mtl',
+      upDir: {x: 0, y: 1, z: 0},
+      scale: 2,
+      name:"obj"     
+    }
+    objmarker = new hky.OBJMarker(option);
+  }
+ 	/**
+	 * 移动
+	 * @param points 路径点 
+	 * @param turnTime 时间，单位毫秒
+	 * @param speed veryslow （turnTime*4）; slow（turnTime*2）; normal（turnTime*1）; fast（turnTime*0.5）; veryfast（turnTime*0.25）
+	 * @param amark 场景
+	 */
+  function moveobjmarker(){
+    let point = [{lng: 120.17595859761488, lat: 31.31314583046752, alt: 98.89464652932266},
+                  {lng: 120.17600811099865, lat: 31.31212619326228, alt: 99.5104996242795},
+                  {lng: 120.17789713376415, lat: 31.312338381337412, alt: 98.6879817782692},
+                  {lng: 120.17815292143945, lat: 31.313246138283624, alt: 98.23696538728008},
+                  {lng: 120.17607286613301, lat: 31.313182074302215, alt: 98.90048664578096}
+                ] ;
+    
+    objmarker.move(point,20000,"slow",n,map.sandbox);
+  }
+  function removeobjmarker(){
+    map.removeMarker("obj");
+  }
+  function addLightBeamMarker(){
+    let option ={
+      position: {lng: 120.17590446186617, lat: 31.31277632380543, alt: 99.3514941791204},
+      sandbox: map.sandbox,
+      radius: 5,
+      height: 50,
+      color:  new THREE.Color(255, 0, 0),// rgb
+      name:"lmarker"
+    }
+    let lmarker = new hky.LightBeamMarker(option);
+  }
+  function removeLightBeamMarker(){
+    map.removeMarker("lmarker");
+  }
+  function addZoneMarker(){ 
+    let array0 = [
+          {lng: 120.17588838884751, lat: 31.31425566564897, alt: 102.52397762475503},
+          {lng: 120.17587034464486, lat: 31.313279398362873, alt: 98.78582474028498},
+          {lng: 120.17812226921261, lat: 31.31329302852058, alt: 98.24290971208288},
+          {lng: 120.17808758285875, lat: 31.314262044766387, alt: 101.84109846161763},
+          {lng: 120.17588838884751, lat: 31.31425566564897, alt: 102.52397762475503}
+      ];
+      let array1 = [
+          {lng: 120.17693737555088, lat: 31.31378990990006, alt: 98.18283838858329},
+          {lng: 120.17692156505376, lat: 31.313340599444487, alt: 98.74596210886199},
+          {lng: 120.17742496326683, lat: 31.313321539028163, alt: 98.61861664007776},
+          {lng: 120.17736458255453, lat: 31.313745425741654, alt: 98.2824854865354},
+          {lng: 120.17693737555088, lat: 31.31378990990006, alt: 98.18283838858329}
+      ]
+      let points = [
+        {array: array0, hole: false},
+        {array: array1, hole: true}
+      ]
+      let volume1 = {
+        points:points,
+        color: 0xffffff,
+        opacity: 1.0, 
+        top: 30,
+        bottom: 10
+      }
+    let option ={
+        volume: volume1,
+        sandbox: map.sandbox,
+        tagOrientation: altizure.ZoneMarker.TAG_ORIENTATION.HORIZONTAL,//标签的方向 只能是ZoneMarker.TAG_ORIENTATION.HORIZONTAL或ZoneMarker.TAG_ORIENTATION.VERTICAL其中之一
+        tagScale: 2.0,
+        //imgUrl: '../public/assets/img/meta_description.png',
+        textOptions: {
+          text: 'Zone 0',
+          fillStyle: 'red'
+        }
+      }
+    let lmarker = new hky.ZoneMarker(option);
+  }
+  function removeZoneMarker(){
+    map.removeMarker("lmarker");
+  }
+   /**
+     * 删除图标
+     * @param position 气泡位置
+     *  @html 气泡内容html
+     */
+  function addpopup(){
+    map.popup({lng: 120.17586406608106, lat: 31.313096190949626, alt: 98.82785351263495},"这是气泡")
+  }
+  
+  function  closepopup(){
+    map.closepopup();
+  }
+  function addframe(){
+    map.frame( "这是弹框")
+  }
+  
+  function  closeframe(){
+    map.closeframe();
+  }
+  function addline(){
+    let pt = [
+          {lng: 120.17588838884751, lat: 31.31425566564897, alt: 102.52397762475503},
+          {lng: 120.17587034464486, lat: 31.313279398362873, alt: 98.78582474028498},
+          {lng: 120.17812226921261, lat: 31.31329302852058, alt: 98.24290971208288},
+          {lng: 120.17808758285875, lat: 31.314262044766387, alt: 101.84109846161763},
+          {lng: 120.17588838884751, lat: 31.31425566564897, alt: 102.52397762475503}
+      ];
+    let option ={ 
+      name: 'line',
+      sandbox: map.sandbox, 
+      points: pt,
+      color:  new THREE.Color(255, 0, 0),// rgb,
+      fenceHeight: 5,
+      lineWidth:5
+    }
+    let lmarker = new hky.PolyLineMarker(option);
+  }
+  function removeline(){
+    map.removeMarker('line');
+  }
+  function addcircleline(){
+    let pt = [
+          {lng: 120.17588838884751, lat: 31.31425566564897, alt: 102.52397762475503},
+          {lng: 120.17587034464486, lat: 31.313279398362873, alt: 98.78582474028498},
+          {lng: 120.17812226921261, lat: 31.31329302852058, alt: 98.24290971208288},
+          {lng: 120.17808758285875, lat: 31.314262044766387, alt: 101.84109846161763},
+          {lng: 120.17588838884751, lat: 31.31425566564897, alt: 102.52397762475503}
+      ];
+    let option ={ 
+      name: 'cline',
+      sandbox: map.sandbox, 
+      points: pt,
+      color:  new THREE.Color(255, 0, 0),// rgb,
+      lineWidth:2
+    }
+    let lmarker = new hky.PolyCylinderLineMarker(option);
+  }
+  function removecircleline(){
+    map.removeMarker('cline');
+  }
+  function calculateDistance(){
+    map.calculateDistance();
+  }
+  function disablecalculateDistance(){
+    map.disablecalculateDistance();
+  }
+ document.addEventListener('click', handler)
+  function handler (event) {
+    map.closepopup();
+    //console.log(event)
+    let pt = map.sandbox.pickOnProjects(event)
 
-  //飞行设置
-  map.flyTo({ lng: 120.1766745, lat: 30.3132158, alt: 500, tilt: 40 }, 10);
+    if (!pt) {
+      return
+    }
+    console.log('onclick poin  coordinate', pt)
+  }  
+ 
+  var playxml;
+  function play(){
+    playxml = new hky.Play(map,json,n);
+    playxml.play();
+  }
+  function pause(){
+    playxml.pause();
+  }
+  function stop(){
+    playxml.stop();
+  }
+  function continueaction(){
+    playxml.contuinueaction();
+  }
 </script>
 
 </html>
